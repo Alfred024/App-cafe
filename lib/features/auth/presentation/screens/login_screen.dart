@@ -1,6 +1,8 @@
+import 'package:app_cafe/features/auth/presentation/providers/login_form_provider.dart';
 import 'package:app_cafe/features/auth/presentation/widgets/double_bezier_curve_clipper.dart';
 import 'package:app_cafe/features/shared/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../config/theme/app_theme.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -10,7 +12,7 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final colorScheme = AppTheme().getTheme().colorScheme;
-    final textTheme = AppTheme().getTheme().textTheme;
+    //final textTheme = AppTheme().getTheme().textTheme;
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -45,7 +47,8 @@ class LoginScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 10),
               height: size.height * 0.45,
               width: double.infinity,
-              child: const _LoginForm(),
+              child: const Center(child: _LoginForm()),
+              //child: const Center(child: Text('data')),
             )
           ],
         ),
@@ -54,42 +57,53 @@ class LoginScreen extends StatelessWidget {
   }
 }
 
-class _LoginForm extends StatelessWidget {
+class _LoginForm extends ConsumerWidget {
   const _LoginForm({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final iconScheme = AppTheme().getTheme().iconTheme;
     final textStyles = Theme.of(context).textTheme;
+
+    // Watch: Get the value of the state and know when if it changes
+    final loginForm = ref.watch(loginFormProvider);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 30),
       child: Column(
         children: [
-          const Spacer(),
           CustomTextFormField(
-            onFieldSubmitted: (value) {},
             label: 'Correo',
             suffixIcon: Icon(
               Icons.email,
               color: iconScheme.color,
             ),
             keyboardType: TextInputType.emailAddress,
+            errorMessage:
+                loginForm.isFormPosted ? loginForm.email.errorMessage : null,
+            onChanged: (value) {
+              // Read: Get the value of a provider just once (dont listen for state changes)
+              ref.read(loginFormProvider.notifier).onEmailChange(value);
+            },
           ),
           const SizedBox(
             height: 25,
           ),
           CustomTextFormField(
-            onFieldSubmitted: (value) {},
+            obscureText: true,
             suffixIcon: Icon(
               Icons.remove_red_eye,
               color: iconScheme.color,
             ),
             label: 'Contraseña',
-            keyboardType: TextInputType.emailAddress,
+            errorMessage:
+                loginForm.isFormPosted ? loginForm.password.errorMessage : null,
+            onChanged: (value) {
+              ref.read(loginFormProvider.notifier).onPasswordChanged(value);
+            },
           ),
           const SizedBox(
-            height: 60,
+            height: 40,
           ),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -97,7 +111,9 @@ class _LoginForm extends StatelessWidget {
             child: CustomFilledButton(
               radius: const Radius.circular(15),
               text: 'Ingresar',
-              onPressed: () {},
+              onPressed: () {
+                ref.read(loginFormProvider.notifier).onFormSubmit();
+              },
             ),
           ),
           Row(
@@ -119,9 +135,6 @@ class _LoginForm extends StatelessWidget {
                   ))
             ],
           ),
-          const SizedBox(
-            height: 50,
-          )
         ],
       ),
     );
