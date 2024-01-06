@@ -1,9 +1,8 @@
-import 'package:cafe_app/presentation/widgets/shared/custom_filled_button.dart';
+import 'package:app_cafe/config/theme/app_theme.dart';
+import 'package:app_cafe/features/auth/presentation/widgets/double_bezier_curve_clipper.dart';
 import 'package:flutter/material.dart';
-import 'package:cafe_app/presentation/widgets/widgets.dart';
-import 'dart:ui' as ui;
 
-import '../../config/theme/app_theme.dart';
+import '../../../shared/widgets/widgets.dart';
 
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});
@@ -22,7 +21,7 @@ class RegisterScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           ClipPath(
-            clipper: BezierCurveClipper(size: size),
+            clipper: DoubleBezierCurveClipper(size: size),
             child: Container(
               height: size.height * 0.35,
               width: double.infinity,

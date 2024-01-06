@@ -7,10 +7,10 @@ import 'package:flutter/material.dart';
 //import 'package:go_router/go_router.dart';
 
 class ProductsVerticalListView extends StatelessWidget {
-  final String listViewTitle;
+  final String title;
   final List<Product> products;
   const ProductsVerticalListView(
-      {super.key, required this.products, required this.listViewTitle});
+      {super.key, required this.products, required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +23,7 @@ class ProductsVerticalListView extends StatelessWidget {
           height: 15,
         ),
         Text(
-          listViewTitle,
+          title,
           style: textTheme.titleMedium,
         ),
 

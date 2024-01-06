@@ -1,6 +1,6 @@
 import 'package:app_cafe/config/theme/app_theme.dart';
 import 'package:flutter/material.dart';
-//Agregar la dependencia de GoRouter para pusar el método go
+import 'package:go_router/go_router.dart';
 
 class CustomBottomNavigationBar extends StatelessWidget {
   final int currentIndex;
@@ -11,21 +11,21 @@ class CustomBottomNavigationBar extends StatelessWidget {
     borderRadius: BorderRadius.all(Radius.circular(30)),
   );
 
-  // void onItemTapped(BuildContext context, int index) {
-  //   switch (index) {
-  //     case 0:
-  //       context.go('/home/0');
-  //       break;
-  //     case 1:
-  //       context.go('/home/1');
-  //       break;
-  //     case 2:
-  //       context.go('/home/2');
-  //       break;
-  //     default:
-  //       context.go('/home/0');
-  //   }
-  // }
+  void onItemTapped(BuildContext context, int index) {
+    switch (index) {
+      case 0:
+        context.go('/home/0');
+        break;
+      case 1:
+        context.go('/home/1');
+        break;
+      case 2:
+        context.go('/home/2');
+        break;
+      default:
+        context.go('/home/0');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,8 +60,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
                 ),
                 label: 'Profile'),
           ],
-          onTap: (value) {},
-          //onTap: (index) => onItemTapped(context, index),
+          onTap: (index) => onItemTapped(context, index),
         ),
       ),
     );

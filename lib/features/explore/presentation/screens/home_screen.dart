@@ -1,5 +1,6 @@
 import 'package:app_cafe/features/custom_app/presentation/screens/profile_screen.dart';
 import 'package:app_cafe/features/explore/data/food_dishes_list.dart';
+import 'package:app_cafe/features/explore/presentation/widgets/products_vertical_listview.dart';
 import 'package:app_cafe/features/shared/widgets/widgets.dart';
 import 'package:app_cafe/features/explore/presentation/widgets/search_bar_field.dart';
 import 'package:app_cafe/features/explore/presentation/widgets/products_horizontal_listview.dart';
@@ -64,7 +65,7 @@ class HomeView extends StatelessWidget {
             const SizedBox(
               height: 20,
             ),
-            ProductsHorizontalListView(
+            ProductsVerticalListView(
               products: popularFoodDishes,
               title: 'Encuentra tu platillo favorito',
             ),

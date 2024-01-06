@@ -16,29 +16,31 @@ class ProductCartItem extends StatelessWidget {
     final colorScheeme = AppTheme().getTheme().colorScheme;
     final cardDecoration = BoxDecoration(
         borderRadius: BorderRadius.circular(20), color: colorScheeme.surface);
-
-    //Meterle boxShadow
-    final imageDecoration = BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        image: DecorationImage(
-            image: AssetImage(product.imageUrl), fit: BoxFit.cover));
+    final buttonDecoration = BoxDecoration(
+        color: colorScheeme.primary, borderRadius: BorderRadius.circular(50));
 
     return Container(
       padding: const EdgeInsets.all(8),
       height: 120,
       width: double.infinity,
-      margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 15),
+      //margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 15),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          Container(
-            width: size.width * 0.27,
-            decoration: imageDecoration,
+          SizedBox(
+            width: size.width * 0.35,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Image.network(
+                fit: BoxFit.cover,
+                product.imageUrl,
+              ),
+            ),
           ),
           Container(
             padding: const EdgeInsets.only(left: 10, bottom: 5),
             decoration: cardDecoration,
-            width: size.width * 0.6,
+            width: size.width * 0.55,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -52,8 +54,10 @@ class ProductCartItem extends StatelessWidget {
                         maxLines: 2,
                       ),
                     ),
-                    SizedBox(
+                    Container(
+                      width: 35,
                       height: 35,
+                      decoration: buttonDecoration,
                       child: IconButton(
                           onPressed: () {},
                           icon: const Icon(

@@ -35,7 +35,7 @@ class ShoppingCartScreen extends StatelessWidget {
                     return ProductCartItem(
                       product: product,
                       itemsCounter:
-                          1, //TODO:Implementar aquí el read provider para leer la cantidad de items
+                          2, //TODO:Implementar aquí el read provider para leer la cantidad de items
                     );
                   })),
           const _OrderInfoContainer(),
