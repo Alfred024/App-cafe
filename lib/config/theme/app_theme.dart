@@ -24,6 +24,13 @@ class AppTheme {
         fontSize: 16, color: Colors.black, fontWeight: FontWeight.w500),
 
     //Información de productos
+
+    //el displaySmall lo estoy ocupando para mostrar errores
+    displaySmall: TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.w400,
+      color: Color.fromARGB(255, 252, 84, 84),
+    ),
     displayLarge: TextStyle(
         fontSize: 26,
         color: Color.fromARGB(255, 252, 84, 84),

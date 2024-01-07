@@ -20,7 +20,7 @@ final product = Product(
 );
 
 // final appRouter = GoRouter
-final appRouter = GoRouter(initialLocation: '/home/0', routes: [
+final appRouter = GoRouter(initialLocation: '/login', routes: [
   GoRoute(
       path: '/home/:page',
       name: HomeScreen.name,
