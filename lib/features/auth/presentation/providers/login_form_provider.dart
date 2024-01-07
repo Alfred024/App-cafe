@@ -1,3 +1,4 @@
+import 'package:app_cafe/features/auth/presentation/providers/auth_provider.dart';
 import 'package:app_cafe/features/shared/shared.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:formz/formz.dart';
@@ -6,17 +7,17 @@ import 'package:formz/formz.dart';
 final loginFormProvider =
     StateNotifierProvider.autoDispose<LoginFormStateNotifier, LoginFormState>(
         (ref) {
-  return LoginFormStateNotifier();
+  final loginUserCallback = ref.watch(authNotifierProvider.notifier).loginUser;
+  return LoginFormStateNotifier(loginUserCallback: loginUserCallback);
 });
 
 //StateNotifier to define the methods for change the state andhandle events
 class LoginFormStateNotifier extends StateNotifier<LoginFormState> {
-  //final Function(String, String) loginUserCallback;
+  final Function(String, String) loginUserCallback;
 
-  LoginFormStateNotifier(
-      //required this.loginUserCallback,
-      )
-      : super(LoginFormState());
+  LoginFormStateNotifier({
+    required this.loginUserCallback,
+  }) : super(LoginFormState());
 
   onEmailChange(String value) {
     final newEmail = Email.dirty(value);
@@ -36,7 +37,7 @@ class LoginFormStateNotifier extends StateNotifier<LoginFormState> {
 
     if (!state.isValid) return;
 
-    //await loginUserCallback(state.email.value, state.password.value);
+    await loginUserCallback(state.email.value, state.password.value);
   }
 
   _touchEveryField() {

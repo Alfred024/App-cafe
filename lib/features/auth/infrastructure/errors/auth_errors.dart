@@ -1,0 +1,3 @@
+class WrongCredentials {}
+
+class InvalidToken {}
