@@ -20,8 +20,23 @@ class AuthDataSourceImpl implements AuthDataSource {
 
       final user = UserMapper.jsonToEntity(response.data);
       return user;
-    } catch (e) {
-      throw UnimplementedError();
+    } on DioException catch (error) {
+      if (error.response?.statusCode == 401) {
+        throw CustomError(message: 'Unvalid credentials', errorCode: 401);
+      }
+      if (error.type == DioExceptionType.connectionTimeout) {
+        throw CustomError(message: 'Connection Timeout', errorCode: 408);
+      }
+      if (error.response?.statusCode == 500) {
+        // INternal server error
+        throw CustomError(
+            message: 'Sorry we having problems. Please try later',
+            errorCode: 401);
+      }
+      throw CustomError(
+        message: 'Error at login request',
+        errorCode: error.response?.statusCode,
+      );
     }
   }
 

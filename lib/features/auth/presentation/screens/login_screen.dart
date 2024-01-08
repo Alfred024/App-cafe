@@ -1,3 +1,4 @@
+import 'package:app_cafe/features/auth/presentation/providers/auth_provider.dart';
 import 'package:app_cafe/features/auth/presentation/providers/login_form_provider.dart';
 import 'package:app_cafe/features/auth/presentation/widgets/double_bezier_curve_clipper.dart';
 import 'package:app_cafe/features/shared/widgets/widgets.dart';
@@ -60,13 +61,24 @@ class LoginScreen extends StatelessWidget {
 class _LoginForm extends ConsumerWidget {
   const _LoginForm({super.key});
 
+  //Method that displays scaffold message
+  void _showMessage(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final iconScheme = AppTheme().getTheme().iconTheme;
     final textStyles = Theme.of(context).textTheme;
-
     // Watch: Get the value of the state and know when if it changes
     final loginForm = ref.watch(loginFormProvider);
+
+    ref.listen(authNotifierProvider, (prevState, nextState) {
+      if (nextState.errorMessage.isEmpty) return;
+      _showMessage(context, nextState.errorMessage);
+    });
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 30),

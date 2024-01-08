@@ -1,3 +1,6 @@
-class WrongCredentials {}
+class CustomError implements Exception {
+  final String message;
+  final int? errorCode;
 
-class InvalidToken {}
+  CustomError({required this.message, required this.errorCode});
+}

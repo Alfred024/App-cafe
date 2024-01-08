@@ -1,5 +1,5 @@
 import 'package:app_cafe/features/auth/domain/domain.dart';
-import 'package:app_cafe/features/auth/infrastructure/repositories/auth_repository_impl.dart';
+import 'package:app_cafe/features/auth/infrastructure/infrastructure.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final authNotifierProvider =
@@ -18,16 +18,26 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     try {
       final user = await authRepository.login(email, password);
       _setLoggedUser(user);
-    } catch (e) {
-      throw UnimplementedError();
+    } on CustomError catch (error) {
+      logout(error.message);
+    } catch (error) {
+      logout('Not handled error');
     }
+  }
+
+  Future<void> logout([String? errorMessage]) async {
+    state = state.copyWith(
+      user: null,
+      authStatus: AuthStatus.notAuthenticated,
+      errorMessage: errorMessage,
+    );
   }
 
   Future<void> _setLoggedUser(User user) async {
     state = state.copyWith(
       user: user,
       authStatus: AuthStatus.authenticated,
-      errormessage: '',
+      errorMessage: '',
     );
   }
 }
@@ -47,7 +57,7 @@ class AuthState {
   AuthState copyWith({
     User? user,
     AuthStatus? authStatus,
-    String? errormessage,
+    String? errorMessage,
   }) =>
       AuthState(
         user: user ?? this.user,
