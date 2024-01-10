@@ -1,5 +1,5 @@
 import 'package:app_cafe/config/theme/app_theme.dart';
-import 'package:app_cafe/features/auth/presentation/providers/login_form_provider.dart';
+import 'package:app_cafe/features/auth/presentation/providers/auth_provider.dart';
 import 'package:app_cafe/features/auth/presentation/providers/register_form_provider.dart';
 import 'package:app_cafe/features/auth/presentation/widgets/double_bezier_curve_clipper.dart';
 import 'package:flutter/material.dart';
@@ -64,6 +64,12 @@ class RegisterScreen extends StatelessWidget {
 class _RegisterForm extends ConsumerWidget {
   const _RegisterForm();
 
+  void _showMessage(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(message)));
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     const textFieldsWidth = 320.0;
@@ -71,6 +77,11 @@ class _RegisterForm extends ConsumerWidget {
     final iconScheme = AppTheme().getTheme().iconTheme;
     final textStyles = Theme.of(context).textTheme;
     final registerForm = ref.watch(registerFormProvider);
+
+    ref.listen(authNotifierProvider, (prevState, nextState) {
+      if (nextState.errorMessage.isEmpty) return;
+      _showMessage(context, nextState.errorMessage);
+    });
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 30),
@@ -111,6 +122,7 @@ class _RegisterForm extends ConsumerWidget {
           ),
           const SizedBox(height: 25),
           CustomTextFormField(
+            //obscureText: true,
             width: textFieldsWidth,
             height: textFieldsHeight,
             label: 'Contraseña',
@@ -119,14 +131,15 @@ class _RegisterForm extends ConsumerWidget {
               color: iconScheme.color,
             ),
             errorMessage: registerForm.isFormPosted
-                ? registerForm.password.errorMessage
+                ? registerForm.password1.errorMessage
                 : null,
             onChanged: (value) {
-              ref.read(registerFormProvider.notifier).onPasswordChanged(value);
+              ref.read(registerFormProvider.notifier).onPassword1Changed(value);
             },
           ),
           const SizedBox(height: 25),
           CustomTextFormField(
+            //obscureText: true,
             width: textFieldsWidth,
             height: textFieldsHeight,
             label: 'Confirme la contraseña',
@@ -135,10 +148,10 @@ class _RegisterForm extends ConsumerWidget {
               color: iconScheme.color,
             ),
             errorMessage: registerForm.isFormPosted
-                ? registerForm.password.errorMessage
+                ? registerForm.password2.errorMessage
                 : null,
             onChanged: (value) {
-              ref.read(registerFormProvider.notifier).onPasswordChanged(value);
+              ref.read(registerFormProvider.notifier).onPassword2Changed(value);
             },
           ),
           const SizedBox(height: 60),

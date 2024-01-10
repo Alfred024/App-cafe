@@ -18,30 +18,50 @@ class AuthDataSourceImpl implements AuthDataSource {
       final response = await dio
           .post('$baseUrl/login', data: {'email': email, 'password': password});
 
-      final user = UserMapper.jsonToEntity(response.data);
+      final user = UserMapper.jsonToLoginUsirEntity(response.data);
       return user;
     } on DioException catch (error) {
-      if (error.response?.statusCode == 401) {
-        throw CustomError(message: 'Unvalid credentials', errorCode: 401);
-      }
-      if (error.type == DioExceptionType.connectionTimeout) {
-        throw CustomError(message: 'Connection Timeout', errorCode: 408);
-      }
-      if (error.response?.statusCode == 500) {
-        // INternal server error
-        throw CustomError(
-            message: 'Sorry we having problems. Please try later',
-            errorCode: 401);
-      }
-      throw CustomError(
-        message: 'Error at login request',
-        errorCode: error.response?.statusCode,
-      );
+      throw _handleAuthErrors(error, 'login');
     }
   }
 
   @override
-  Future<User> register(String email, String password, String fullname) {
-    throw UnimplementedError();
+  Future<User> register(
+      String fullName, String email, String password1, String password2) async {
+    if (password1 != password2) {
+      throw CustomError(message: 'The passwords dont match', errorCode: 401);
+    }
+
+    try {
+      final response = await dio.post('$baseUrl/register', data: {
+        'fullName': fullName,
+        'email': email,
+        'password1': password1,
+        'password2': password2,
+      });
+      final newUser = UserMapper.jsonToRegisterUsirEntity(response.data);
+      return newUser;
+    } on DioException catch (error) {
+      throw _handleAuthErrors(error, 'register');
+    }
+  }
+
+  CustomError _handleAuthErrors(DioException error, String method) {
+    if (error.response?.statusCode == 401) {
+      return CustomError(message: 'Unvalid credentials', errorCode: 401);
+    }
+    if (error.type == DioExceptionType.connectionTimeout) {
+      return CustomError(message: 'Connection Timeout', errorCode: 408);
+    }
+    if (error.response?.statusCode == 500) {
+      // INternal server error
+      return CustomError(
+          message: 'Sorry we having problems. Please try later',
+          errorCode: 401);
+    }
+    return CustomError(
+      message: 'Error at $method request',
+      errorCode: error.response?.statusCode,
+    );
   }
 }

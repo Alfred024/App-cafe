@@ -25,10 +25,31 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     }
   }
 
+  Future<void> registerUser(
+      String fullName, String email, String password1, String password2) async {
+    try {
+      final user =
+          await authRepository.register(fullName, email, password1, password2);
+      _setRegistereddUser(user);
+    } on CustomError catch (error) {
+      notRegister(error.message);
+    } catch (error) {
+      notRegister('Not handled error');
+    }
+  }
+
   Future<void> logout([String? errorMessage]) async {
     state = state.copyWith(
       user: null,
       authStatus: AuthStatus.notAuthenticated,
+      errorMessage: errorMessage,
+    );
+  }
+
+  Future<void> notRegister([String? errorMessage]) async {
+    state = state.copyWith(
+      user: null,
+      authStatus: AuthStatus.notValidated,
       errorMessage: errorMessage,
     );
   }
@@ -40,9 +61,25 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
       errorMessage: '',
     );
   }
+
+  // TODO: Mandar correo de confirmación y manejar cómo se manda el usuario
+  Future<void> _setRegistereddUser(User user) async {
+    state = state.copyWith(
+      user: user,
+      authStatus: AuthStatus.validated,
+      errorMessage: '',
+    );
+  }
 }
 
-enum AuthStatus { checking, authenticated, notAuthenticated }
+// 'validated' para cuando un usuario se registra exitosamente y debe confirmar su correo
+enum AuthStatus {
+  checking,
+  authenticated, //login method
+  notAuthenticated, //login method
+  validated, //register method
+  notValidated, //register method
+}
 
 class AuthState {
   final User? user;

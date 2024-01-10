@@ -1,54 +1,82 @@
+import 'package:app_cafe/features/auth/presentation/providers/auth_provider.dart';
 import 'package:app_cafe/features/shared/shared.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:formz/formz.dart';
 
 final registerFormProvider =
     StateNotifierProvider<RegisterFormNotifier, RegisterFormState>((ref) {
-  return RegisterFormNotifier();
+  final registerUserCallback =
+      ref.read(authNotifierProvider.notifier).registerUser;
+  return RegisterFormNotifier(registerUserCallback: registerUserCallback);
 });
 
 class RegisterFormNotifier extends StateNotifier<RegisterFormState> {
-  RegisterFormNotifier() : super(RegisterFormState());
+  final Function(String, String, String, String) registerUserCallback;
+
+  RegisterFormNotifier({required this.registerUserCallback})
+      : super(RegisterFormState());
 
   onNameChanged(String value) {
     final newName = Name.dirty(value);
-    state.copyWith(
+    state = state.copyWith(
         name: newName,
-        isValid: Formz.validate([newName, state.email, state.password]));
+        isValid: Formz.validate([
+          newName,
+          state.email,
+          state.password1,
+          state.password2,
+        ]));
   }
 
   onEmailChange(String value) {
     final newEmail = Email.dirty(value);
     state = state.copyWith(
         email: newEmail,
-        isValid: Formz.validate([newEmail, state.name, state.password]));
+        isValid: Formz.validate([
+          newEmail,
+          state.name,
+          state.password1,
+          state.password2,
+        ]));
   }
 
-  onPasswordChanged(String value) {
+  onPassword1Changed(String value) {
     final newPassword = Password.dirty(value);
     state = state.copyWith(
-        password: newPassword,
-        isValid: Formz.validate([newPassword, state.name, state.email]));
+        password1: newPassword,
+        isValid: Formz.validate(
+            [newPassword, state.password2, state.name, state.email]));
+  }
+
+  onPassword2Changed(String value) {
+    final newPassword = Password.dirty(value);
+    state = state.copyWith(
+        password2: newPassword,
+        isValid: Formz.validate(
+            [newPassword, state.password1, state.name, state.email]));
   }
 
   onFormSubmit() async {
     _touchEveryField();
     if (!state.isValid) return;
 
-    //await loginUserCallback(state.email.value, state.password.value);
+    await registerUserCallback(state.name.value, state.email.value,
+        state.password1.value, state.password2.value);
   }
 
   _touchEveryField() {
     final name = Name.dirty(state.name.value);
     final email = Email.dirty(state.email.value);
-    final password = Password.dirty(state.password.value);
+    final password1 = Password.dirty(state.password1.value);
+    final password2 = Password.dirty(state.password2.value);
 
     state = state.copyWith(
         isFormPosted: true,
         name: name,
         email: email,
-        password: password,
-        isValid: Formz.validate([email, password]));
+        password1: password1,
+        password2: password2,
+        isValid: Formz.validate([name, email, password1, password2]));
   }
 }
 
@@ -60,7 +88,8 @@ class RegisterFormState {
   // final Name first_lastname;
   // final Name second_lastname;
   final Email email;
-  final Password password;
+  final Password password1;
+  final Password password2;
 
   RegisterFormState(
       {this.isPosting = false,
@@ -68,7 +97,8 @@ class RegisterFormState {
       this.isValid = false,
       this.name = const Name.pure(),
       this.email = const Email.pure(),
-      this.password = const Password.pure()});
+      this.password1 = const Password.pure(),
+      this.password2 = const Password.pure()});
 
   RegisterFormState copyWith({
     bool? isPosting,
@@ -76,7 +106,8 @@ class RegisterFormState {
     bool? isValid,
     Name? name,
     Email? email,
-    Password? password,
+    Password? password1,
+    Password? password2,
   }) =>
       RegisterFormState(
         isPosting: isPosting ?? this.isPosting,
@@ -84,7 +115,8 @@ class RegisterFormState {
         isValid: isValid ?? this.isValid,
         name: name ?? this.name,
         email: email ?? this.email,
-        password: password ?? this.password,
+        password1: password1 ?? this.password1,
+        password2: password2 ?? this.password2,
       );
 
   @override
@@ -96,7 +128,7 @@ class RegisterFormState {
     isValid: $isValid
     name: $name
     email: $email
-    password: $password
+    password: $password1
 ''';
   }
 }

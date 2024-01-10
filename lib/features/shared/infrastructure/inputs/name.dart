@@ -3,11 +3,11 @@ import 'package:formz/formz.dart';
 enum NameError { empty, length, format }
 
 class Name extends FormzInput<String, NameError> {
-  // static final RegExp nameRegExp = RegExp(
-  //   r'^[a-zA-Z]{3,10}$',
-  // );
-  static final RegExp nameRegExp = RegExp(r"^[\p{L} ,.'-]*$",
-      caseSensitive: false, unicode: true, dotAll: true);
+  static final RegExp nameRegExp = RegExp(
+    r'^[a-zA-Z]{3,10}$',
+  );
+  // static final RegExp nameRegExp = RegExp(r"^[\p{L} ,.'-]*$",
+  //     caseSensitive: false, unicode: true, dotAll: true);
 
   const Name.pure() : super.pure('');
 
@@ -29,7 +29,7 @@ class Name extends FormzInput<String, NameError> {
   }
 
   @override
-  NameError? validator(value) {
+  NameError? validator(String value) {
     if (value.isEmpty || value.trim().isEmpty) return NameError.empty;
     if (value.length < 3) return NameError.length;
     if (!nameRegExp.hasMatch(value)) return NameError.format;
