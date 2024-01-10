@@ -3,21 +3,37 @@ import 'package:app_cafe/features/auth/domain/domain.dart';
 import 'package:app_cafe/features/auth/infrastructure/infrastructure.dart';
 import 'package:dio/dio.dart';
 
+import '../interceptors/api_interceptors.dart';
+
 class AuthDataSourceImpl implements AuthDataSource {
-  final dio = Dio(BaseOptions(baseUrl: Environment.apiUrl));
-  final baseUrl = '/auth';
+  final dio = Dio(BaseOptions(
+    baseUrl: Environment.apiUrl,
+    connectTimeout: const Duration(milliseconds: 8000),
+    receiveTimeout: const Duration(milliseconds: 8000),
+  ));
+
+  AuthDataSourceImpl() {
+    _initializeInterceptors();
+  }
 
   @override
-  Future<User> checkAuthStatus(String token) {
-    throw UnimplementedError();
+  Future<User> checkAuthStatus(String token) async {
+    try {
+      final response = await dio.post('/auth/check-status',
+          options: Options(headers: {'Authorization': 'Bearer $token'}));
+
+      final user = UserMapper.jsonToLoginUsirEntity(response.data);
+      return user;
+    } on DioException catch (error) {
+      throw _handleAuthErrors(error, 'checking authentication status');
+    }
   }
 
   @override
   Future<User> login(String email, String password) async {
     try {
       final response = await dio
-          .post('$baseUrl/login', data: {'email': email, 'password': password});
-
+          .post('/auth/login', data: {'email': email, 'password': password});
       final user = UserMapper.jsonToLoginUsirEntity(response.data);
       return user;
     } on DioException catch (error) {
@@ -33,7 +49,7 @@ class AuthDataSourceImpl implements AuthDataSource {
     }
 
     try {
-      final response = await dio.post('$baseUrl/register', data: {
+      final response = await dio.post('/auth/register', data: {
         'fullName': fullName,
         'email': email,
         'password1': password1,
@@ -63,5 +79,9 @@ class AuthDataSourceImpl implements AuthDataSource {
       message: 'Error at $method request',
       errorCode: error.response?.statusCode,
     );
+  }
+
+  _initializeInterceptors() {
+    dio.interceptors.add(ApiInterceptors());
   }
 }

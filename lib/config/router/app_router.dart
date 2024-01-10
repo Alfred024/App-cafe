@@ -2,8 +2,7 @@ import 'package:app_cafe/features/products/domain/entities/product.dart';
 import 'package:app_cafe/features/products/presentation/screens/product_info_screen.dart';
 import 'package:go_router/go_router.dart';
 
-import '../../features/auth/presentation/screens/login_screen.dart';
-import '../../features/auth/presentation/screens/register_screen.dart';
+import '../../features/auth/presentation/screens/screens.dart';
 import '../../features/explore/presentation/screens/home_screen.dart';
 
 final product = Product(
@@ -20,7 +19,7 @@ final product = Product(
 );
 
 // final appRouter = GoRouter
-final appRouter = GoRouter(initialLocation: '/login', routes: [
+final appRouter = GoRouter(initialLocation: '/home/0', routes: [
   GoRoute(
       path: '/home/:page',
       name: HomeScreen.name,
@@ -43,6 +42,10 @@ final appRouter = GoRouter(initialLocation: '/login', routes: [
   GoRoute(
     path: '/register',
     builder: (context, state) => const RegisterScreen(),
+  ),
+  GoRoute(
+    path: '/splash',
+    builder: (context, state) => const CheckAuthStatusScreen(),
   ),
   GoRoute(
     path: '/food-info',

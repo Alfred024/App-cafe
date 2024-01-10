@@ -1,18 +1,18 @@
-enum Role { admin, normal }
+enum Role { admin, client }
 
 class User {
   String? fullName;
   String email;
-  String password;
+  String? password;
   String token;
   DateTime? createdAt;
   Role? role;
 
   User({
-    this.fullName = 'User',
-    this.role = Role.normal,
+    this.fullName,
+    this.role = Role.client,
+    this.password,
     required this.email,
-    required this.password,
     required this.token,
   }) {
     createdAt ??= DateTime.now();

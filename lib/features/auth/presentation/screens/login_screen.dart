@@ -102,7 +102,7 @@ class _LoginForm extends ConsumerWidget {
             height: 25,
           ),
           CustomTextFormField(
-            obscureText: true,
+            //obscureText: true,
             suffixIcon: Icon(
               Icons.remove_red_eye,
               color: iconScheme.color,
