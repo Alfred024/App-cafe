@@ -4,6 +4,7 @@ import 'package:app_cafe/features/auth/presentation/widgets/double_bezier_curve_
 import 'package:app_cafe/features/shared/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../../../config/theme/app_theme.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -59,7 +60,7 @@ class LoginScreen extends StatelessWidget {
 }
 
 class _LoginForm extends ConsumerWidget {
-  const _LoginForm({super.key});
+  const _LoginForm();
 
   //Method that displays scaffold message
   void _showMessage(BuildContext context, String message) {
@@ -136,7 +137,9 @@ class _LoginForm extends ConsumerWidget {
                 style: textStyles.labelSmall,
               ),
               TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    context.push('/register');
+                  },
                   child: const Text(
                     'Crea una aquí',
                     style: TextStyle(

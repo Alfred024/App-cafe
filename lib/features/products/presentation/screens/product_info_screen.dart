@@ -9,7 +9,7 @@ class ProductInfoScreen extends StatelessWidget {
   //final Product product;
 
   const ProductInfoScreen({
-    super.key,
+    super.key, required product,
   });
 
   @override
@@ -31,10 +31,10 @@ class ProductInfoScreen extends StatelessWidget {
             const _MovieImageSection(
                 foodDishUrl:
                     'https://images.pexels.com/photos/70497/pexels-photo-70497.jpeg?auto=compress&cs=tinysrgb&w=600'),
-            _ProductInfoSection(
+            const _ProductInfoSection(
               title: 'Hamburguesacon papas',
               price: 60,
-              description: 'Una hamburguesa acompañada con una ración de papas fritas. Incluye un vaso de agua de sabor',,
+              description: 'Una hamburguesa acompañada con una ración de papas fritas. Incluye un vaso de agua de sabor',
             ),
             const Spacer(),
             Container(
