@@ -4,14 +4,14 @@ import 'package:app_cafe/features/auth/domain/domain.dart';
 
 // En el registro, también regresa un token???
 class UserMapper {
-  static User jsonToLoginUsirEntity(Map<String, dynamic> json) => User(
+  static User jsonToLoginUserEntity(Map<String, dynamic> json) => User(
         email: json['email'],
         fullName: json['fullName'],
-        role: json['role'],
+        role: json['role'] == 'client' ? Role.client : Role.admin,
         token: json['token'],
       );
 
-  static User jsonToRegisterUsirEntity(Map<String, dynamic> json) => User(
+  static User jsonToRegisterUserEntity(Map<String, dynamic> json) => User(
         fullName: json['fullName'],
         email: json['email'],
         password: json['password1'],
