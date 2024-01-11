@@ -1,56 +1,74 @@
-import 'package:app_cafe/features/products/domain/entities/product.dart';
-import 'package:app_cafe/features/products/presentation/screens/product_info_screen.dart';
+//Dependencies
+import 'package:app_cafe/config/router/app_router_notifier.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+// Features Screens
+import '../../features/products/presentation/screens/product_info_screen.dart';
 import '../../features/auth/presentation/screens/screens.dart';
 import '../../features/explore/presentation/screens/home_screen.dart';
 
-final product = Product(
-  id: 1,
-  title: 'Hamburguesa con papa',
-  imageUrl:
-      'https://images.pexels.com/photos/70497/pexels-photo-70497.jpeg?auto=compress&cs=tinysrgb&w=600',
-  price: 60.0,
-  description:
-      'Una hamburguesa acompañada con una ración de papas fritas. Incluye un vaso de agua de sabor',
-  categories: ['food'],
-  clasifications: ['popular'],
-  available: true,
-);
+//Providers
+import '../../features/auth/presentation/providers/auth_provider.dart';
 
-// final appRouter = GoRouter
-final appRouter = GoRouter(initialLocation: '/home/0', routes: [
-  GoRoute(
-      path: '/home/:page',
-      name: HomeScreen.name,
-      builder: (context, state) {
-        final pageIndexString = state.pathParameters['page'] ?? '0';
-        final pageIndex = int.parse(pageIndexString);
-        return HomeScreen(pageIndex: pageIndex);
-      },
-      routes: [
-        GoRoute(
-          path: 'food-info/:id',
-          builder: (context, state) => ProductInfoScreen(product: product),
-        )
-      ]),
-  GoRoute(path: '/', redirect: (_, __) => '/home/0'),
-  GoRoute(
-    path: '/login',
-    builder: (context, state) => const LoginScreen(),
-  ),
-  GoRoute(
-    path: '/register',
-    builder: (context, state) => const RegisterScreen(),
-  ),
-  GoRoute(
-    path: '/splash',
-    builder: (context, state) => const CheckAuthStatusScreen(),
-  ),
-  GoRoute(
-    path: '/food-info',
-    builder: (context, state) => ProductInfoScreen(
-      product: product,
-    ),
-  ),
-]);
+final goRouterProvider = Provider((ref) {
+  final appRouterNotifier = ref.read(appRouterNotifierProvider);
+
+  return GoRouter(
+    //initialLocation: '/splash',
+    initialLocation: '/login',
+    refreshListenable: appRouterNotifier,
+    routes: [
+      GoRoute(
+          path: '/home/:page',
+          name: HomeScreen.name,
+          builder: (context, state) {
+            final pageIndexString = state.pathParameters['page'] ?? '0';
+            final pageIndex = int.parse(pageIndexString);
+            return HomeScreen(pageIndex: pageIndex);
+          },
+          routes: [
+            GoRoute(
+              path: 'food-info/:id',
+              builder: (context, state) => const ProductInfoScreen(),
+            )
+          ]),
+      GoRoute(path: '/', redirect: (_, __) => '/home/0'),
+      GoRoute(
+        path: '/login',
+        builder: (context, state) => const LoginScreen(),
+      ),
+      GoRoute(
+        path: '/register',
+        builder: (context, state) => const RegisterScreen(),
+      ),
+      GoRoute(
+        path: '/splash',
+        builder: (context, state) => const CheckAuthStatusScreen(),
+      ),
+    ],
+    redirect: (context, state) {
+      final isGoingTo = state.path;
+      final authStatus = appRouterNotifier.authStatus;
+
+      if (isGoingTo == '/splash' && authStatus == AuthStatus.checking)
+        return null;
+
+      if (authStatus == AuthStatus.notAuthenticated) {
+        if (isGoingTo == '/login' || isGoingTo == '/register') return null;
+
+        return '/login';
+      }
+
+      if (authStatus == AuthStatus.authenticated) {
+        if (isGoingTo == '/login' ||
+            isGoingTo == '/register' ||
+            isGoingTo == '/splash') {
+          return '/home/0';
+        }
+      }
+
+      return null;
+    },
+  );
+});

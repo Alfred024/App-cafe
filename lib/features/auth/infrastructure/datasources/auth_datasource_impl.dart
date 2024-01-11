@@ -6,23 +6,25 @@ import 'package:dio/dio.dart';
 import '../interceptors/api_interceptors.dart';
 
 class AuthDataSourceImpl implements AuthDataSource {
-  final dio = Dio(BaseOptions(
-    baseUrl: Environment.apiUrl,
-    connectTimeout: const Duration(milliseconds: 8000),
-    receiveTimeout: const Duration(milliseconds: 8000),
-  ));
+  Dio? dio;
 
   AuthDataSourceImpl() {
+    dio = Dio(BaseOptions(
+      baseUrl: Environment.apiUrl,
+      //baseUrl: 'http://localhost:3000/api',
+      connectTimeout: const Duration(milliseconds: 8000),
+      receiveTimeout: const Duration(milliseconds: 8000),
+    ));
     _initializeInterceptors();
   }
 
   @override
   Future<User> checkAuthStatus(String token) async {
     try {
-      final response = await dio.post('/auth/check-status',
+      final response = await dio?.post('/auth/check-status',
           options: Options(headers: {'Authorization': 'Bearer $token'}));
 
-      final user = UserMapper.jsonToLoginUsirEntity(response.data);
+      final user = UserMapper.jsonToLoginUsirEntity(response?.data);
       return user;
     } on DioException catch (error) {
       throw _handleAuthErrors(error, 'checking authentication status');
@@ -32,9 +34,10 @@ class AuthDataSourceImpl implements AuthDataSource {
   @override
   Future<User> login(String email, String password) async {
     try {
+      print('Tryng to login');
       final response = await dio
-          .post('/auth/login', data: {'email': email, 'password': password});
-      final user = UserMapper.jsonToLoginUsirEntity(response.data);
+          ?.post('/auth/login', data: {'email': email, 'password': password});
+      final user = UserMapper.jsonToLoginUsirEntity(response?.data);
       return user;
     } on DioException catch (error) {
       throw _handleAuthErrors(error, 'login');
@@ -49,13 +52,13 @@ class AuthDataSourceImpl implements AuthDataSource {
     }
 
     try {
-      final response = await dio.post('/auth/register', data: {
+      final response = await dio?.post('/auth/register', data: {
         'fullName': fullName,
         'email': email,
         'password1': password1,
         'password2': password2,
       });
-      final newUser = UserMapper.jsonToRegisterUsirEntity(response.data);
+      final newUser = UserMapper.jsonToRegisterUsirEntity(response?.data);
       return newUser;
     } on DioException catch (error) {
       throw _handleAuthErrors(error, 'register');
@@ -82,6 +85,6 @@ class AuthDataSourceImpl implements AuthDataSource {
   }
 
   _initializeInterceptors() {
-    dio.interceptors.add(ApiInterceptors());
+    dio?.interceptors.add(ApiInterceptors());
   }
 }

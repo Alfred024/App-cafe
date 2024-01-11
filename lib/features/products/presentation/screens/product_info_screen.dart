@@ -1,14 +1,16 @@
-import 'package:app_cafe/features/products/domain/entities/product.dart';
 import 'package:app_cafe/features/products/presentation/widgets/food_info_bezier_curve_clipper.dart';
 import 'package:app_cafe/features/products/presentation/widgets/product_quantity_selector.dart';
 import 'package:app_cafe/features/shared/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import '../../../../config/theme/app_theme.dart';
 
-class ProductInfoScreen extends StatelessWidget {
-  final Product product;
 
-  const ProductInfoScreen({super.key, required this.product});
+class ProductInfoScreen extends StatelessWidget {
+  //final Product product;
+
+  const ProductInfoScreen({
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,11 +28,13 @@ class ProductInfoScreen extends StatelessWidget {
       body: SizedBox.expand(
         child: Column(
           children: [
-            _MovieImageSection(foodDishUrl: product.imageUrl),
+            const _MovieImageSection(
+                foodDishUrl:
+                    'https://images.pexels.com/photos/70497/pexels-photo-70497.jpeg?auto=compress&cs=tinysrgb&w=600'),
             _ProductInfoSection(
-              title: product.title,
-              price: product.price,
-              description: product.description,
+              title: 'Hamburguesacon papas',
+              price: 60,
+              description: 'Una hamburguesa acompañada con una ración de papas fritas. Incluye un vaso de agua de sabor',,
             ),
             const Spacer(),
             Container(

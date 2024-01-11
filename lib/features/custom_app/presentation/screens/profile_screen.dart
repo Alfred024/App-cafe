@@ -1,4 +1,5 @@
 import 'package:app_cafe/config/menu/menu_items.dart';
+import 'package:app_cafe/features/shared/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import '../../../../config/theme/app_theme.dart';
 // Agregar la dependencia go_router
@@ -9,7 +10,10 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scaffoldKey = GlobalKey<ScaffoldState>();
+
     return Scaffold(
+      endDrawer: SideMenu(scaffoldKey: scaffoldKey),
       appBar: AppBar(
         leading: IconButton(
             onPressed: () {},

@@ -1,3 +1,4 @@
+export 'package:app_cafe/features/shared/widgets/side_menu.dart';
 export 'package:app_cafe/features/shared/widgets/background_gradient.dart';
 export 'package:app_cafe/features/shared/widgets/custom_bottom_navbar.dart';
 export 'package:app_cafe/features/shared/widgets/custom_filled_button.dart';
