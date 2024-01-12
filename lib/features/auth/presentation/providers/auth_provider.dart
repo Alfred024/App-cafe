@@ -79,7 +79,6 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
   }
 
   Future<void> _setLoggedUser(User user) async {
-    await keyValueStorageService.setKeyValue('token', user.token);
     print('TOKEN: ' + user.token);
     state = state.copyWith(
       user: user,
@@ -90,6 +89,7 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
 
   // TODO: Mandar correo de confirmación y manejar cómo se manda el usuario
   Future<void> _setRegistereddUser(User user) async {
+    await keyValueStorageService.setKeyValue('token', user.token);
     state = state.copyWith(
       user: user,
       authStatus: AuthStatus.validated,

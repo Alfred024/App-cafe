@@ -24,7 +24,7 @@ class AuthDataSourceImpl implements AuthDataSource {
       final response = await dio?.post('/auth/check-status',
           options: Options(headers: {'Authorization': 'Bearer $token'}));
 
-      final user = UserMapper.jsonToLoginUsirEntity(response?.data);
+      final user = UserMapper.jsonToLoginUserEntity(response?.data);
       return user;
     } on DioException catch (error) {
       throw _handleAuthErrors(error, 'checking authentication status');
@@ -34,10 +34,9 @@ class AuthDataSourceImpl implements AuthDataSource {
   @override
   Future<User> login(String email, String password) async {
     try {
-      print('Tryng to login');
       final response = await dio
           ?.post('/auth/login', data: {'email': email, 'password': password});
-      final user = UserMapper.jsonToLoginUsirEntity(response?.data);
+      final user = UserMapper.jsonToLoginUserEntity(response?.data);
       return user;
     } on DioException catch (error) {
       throw _handleAuthErrors(error, 'login');
@@ -58,7 +57,7 @@ class AuthDataSourceImpl implements AuthDataSource {
         'password1': password1,
         'password2': password2,
       });
-      final newUser = UserMapper.jsonToRegisterUsirEntity(response?.data);
+      final newUser = UserMapper.jsonToRegisterUserEntity(response?.data);
       return newUser;
     } on DioException catch (error) {
       throw _handleAuthErrors(error, 'register');

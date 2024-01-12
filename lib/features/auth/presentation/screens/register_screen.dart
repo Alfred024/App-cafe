@@ -4,6 +4,7 @@ import 'package:app_cafe/features/auth/presentation/providers/register_form_prov
 import 'package:app_cafe/features/auth/presentation/widgets/double_bezier_curve_clipper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../shared/widgets/widgets.dart';
 
@@ -16,7 +17,8 @@ class RegisterScreen extends StatelessWidget {
     final colorScheme = AppTheme().getTheme().colorScheme;
     final size = MediaQuery.of(context).size;
     //final scaffoldBackgroundColor = Theme.of(context).scaffoldBackgroundColor;
-    final textStyles = Theme.of(context).textTheme;
+    // TODO: IMPLEMENT THEME AND COLORS
+    //final textStyles = Theme.of(context).textTheme;
 
     return Scaffold(
         body: SingleChildScrollView(
@@ -174,7 +176,9 @@ class _RegisterForm extends ConsumerWidget {
                 style: textStyles.labelSmall,
               ),
               TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    context.pop();
+                  },
                   child: const Text(
                     'Ingresa aquí',
                     style: TextStyle(
