@@ -5,8 +5,9 @@ class Product {
   final String imageUrl;
   final double price;
   final bool available;
-  final List<String> categories;
-  final List<String> clasifications;
+  final List<String> categories; //Refer if it is food, snack or drink
+  final List<String>
+      clasifications; //Refer of the caractherstic like popular, or quick prepared..
 
   Product({
     required this.id,

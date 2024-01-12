@@ -8,6 +8,10 @@ import 'package:app_cafe/features/products/presentation/screens/shopping_cart_sc
 import 'package:flutter/material.dart';
 import '../../../../config/theme/app_theme.dart';
 
+// TODO: Implementar función del SearchDelegate
+// TODO: Implementar función del filtrado de comida
+// TODO: Crear provider de los platillos
+
 class HomeScreen extends StatelessWidget {
   static const name = 'home-screen';
   final int pageIndex;
