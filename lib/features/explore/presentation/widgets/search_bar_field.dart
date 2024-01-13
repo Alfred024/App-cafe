@@ -3,6 +3,8 @@ import 'package:app_cafe/features/explore/presentation/delegates/search_product_
 import 'package:app_cafe/features/products/domain/entities/product.dart';
 import 'package:flutter/material.dart';
 
+// TODO: Implementar funciones del SearchDelegate
+
 class SearchBarField extends StatelessWidget {
   final ValueChanged<String>? onValue;
   const SearchBarField({super.key, this.onValue});

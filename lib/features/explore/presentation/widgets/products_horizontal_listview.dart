@@ -1,10 +1,11 @@
+// Dependencies
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:animate_do/animate_do.dart';
+
 import 'package:app_cafe/config/theme/app_theme.dart';
 import 'package:app_cafe/features/products/domain/entities/product.dart';
 import 'package:app_cafe/features/shared/widgets/widgets.dart';
-import 'package:flutter/material.dart';
-// Agregar la dependencia go_router
-//import 'package:go_router/go_router.dart';
 
 class ProductsHorizontalListView extends StatelessWidget {
   final List<Product> products;
@@ -30,8 +31,8 @@ class ProductsHorizontalListView extends StatelessWidget {
                   physics: const BouncingScrollPhysics(),
                   itemCount: products.length,
                   itemBuilder: (context, index) {
-                    final foodDish = products[index];
-                    return _FoodDishSlide(foodDish: foodDish);
+                    final product = products[index];
+                    return _FoodDishSlide(product: product);
                   }))
         ],
       ),
@@ -40,8 +41,8 @@ class ProductsHorizontalListView extends StatelessWidget {
 }
 
 class _FoodDishSlide extends StatelessWidget {
-  final Product foodDish;
-  const _FoodDishSlide({required this.foodDish});
+  final Product product;
+  const _FoodDishSlide({required this.product});
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +55,7 @@ class _FoodDishSlide extends StatelessWidget {
             borderRadius: BorderRadius.circular(20),
             child: Image.network(
               fit: BoxFit.cover,
-              foodDish.imageUrl,
+              product.imageUrl,
               loadingBuilder: (context, child, loadingProgress) {
                 if (loadingProgress != null) {
                   return const Center(
@@ -63,8 +64,9 @@ class _FoodDishSlide extends StatelessWidget {
                   ));
                 }
                 return GestureDetector(
-                    //onTap: () => context.push('/home/0/food-info/${foodDish.id}'),
-                    onTap: () {},
+                    onTap: () {
+                      context.push('/home/0/food-info/${product.id}');
+                    },
                     child: FadeIn(
                       child: child,
                     ));
@@ -76,14 +78,14 @@ class _FoodDishSlide extends StatelessWidget {
               bottom: 30,
               left: 5,
               child: Text(
-                foodDish.title,
+                product.title,
                 style: const TextStyle(fontSize: 18, color: Colors.white),
               )),
           Positioned(
               bottom: 10,
               left: 5,
               child: Text(
-                '\$${foodDish.price}',
+                '\$${product.price}',
                 style: const TextStyle(fontSize: 16, color: Colors.white),
               )),
         ],

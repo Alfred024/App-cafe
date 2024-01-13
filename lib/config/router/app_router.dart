@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 
 // Features Screens
 import '../../features/auth/presentation/screens/screens.dart';
-import '../../features/explore/presentation/screens/home_screen.dart';
+import '../../features/explore/presentation/screens/screens.dart';
 
 //Providers
 
@@ -28,9 +28,24 @@ final goRouterProvider = Provider((ref) {
           },
           routes: [
             GoRoute(
+              path: 'products/:category',
+              builder: (context, state) {
+                final category =
+                    state.pathParameters['category'] ?? 'no-category';
+                return ProductsByCategoryScreen(
+                  category: category,
+                );
+              },
+            ),
+            GoRoute(
               path: 'food-info/:id',
-              builder: (context, state) => const ProductInfoScreen(product: {}),
-            )
+              builder: (context, state) {
+                final productId = state.pathParameters['id'] ?? 'No id founded';
+                return ProductInfoScreen(
+                  productId: int.parse(productId),
+                );
+              },
+            ),
           ]),
       GoRoute(path: '/', redirect: (_, __) => '/home/0'),
       GoRoute(

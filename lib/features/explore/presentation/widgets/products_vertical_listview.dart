@@ -1,10 +1,11 @@
+// Dependencies
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:animate_do/animate_do.dart';
+
 import 'package:app_cafe/config/theme/app_theme.dart';
 import 'package:app_cafe/features/products/domain/entities/product.dart';
 import 'package:app_cafe/features/shared/widgets/widgets.dart';
-import 'package:flutter/material.dart';
-// Agregar la dependencia go_router
-//import 'package:go_router/go_router.dart';
 
 class ProductsVerticalListView extends StatelessWidget {
   final String title;
@@ -27,6 +28,7 @@ class ProductsVerticalListView extends StatelessWidget {
           style: textTheme.titleMedium,
         ),
 
+        // TODO: Arreglar el display del ListView
         // Container(
         //   height: 500,
         //   child: ListView.builder(
@@ -87,8 +89,8 @@ class _FoodDishCard extends StatelessWidget {
                   ));
                 }
                 return GestureDetector(
-                    onTap: () {},
-                    //onTap: () => context.push('/home/0/food-info/${product.id}'),
+                    onTap: () =>
+                        context.push('/home/0/food-info/${product.id}'),
                     child: FadeIn(
                       child: child,
                     ));

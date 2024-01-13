@@ -1,16 +1,17 @@
-import 'package:app_cafe/features/custom_app/presentation/screens/profile_screen.dart';
-import 'package:app_cafe/features/explore/data/food_dishes_list.dart';
-import 'package:app_cafe/features/explore/presentation/widgets/products_vertical_listview.dart';
-import 'package:app_cafe/features/shared/widgets/widgets.dart';
-import 'package:app_cafe/features/explore/presentation/widgets/search_bar_field.dart';
-import 'package:app_cafe/features/explore/presentation/widgets/products_horizontal_listview.dart';
-import 'package:app_cafe/features/products/presentation/screens/shopping_cart_screen.dart';
+// Dependencies
 import 'package:flutter/material.dart';
-import '../../../../config/theme/app_theme.dart';
+import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+// Widgets
+import 'package:app_cafe/features/shared/widgets/widgets.dart';
+import 'package:app_cafe/features/explore/presentation/widgets/widgets.dart';
+// Screen
+import 'package:app_cafe/features/custom_app/presentation/screens/profile_screen.dart';
+import 'package:app_cafe/features/products/presentation/screens/shopping_cart_screen.dart';
 
-// TODO: Implementar función del SearchDelegate
-// TODO: Implementar función del filtrado de comida
-// TODO: Crear provider de los platillos
+import 'package:app_cafe/features/explore/data/food_dishes_list.dart';
+
+import '../../../../config/theme/app_theme.dart';
 
 class HomeScreen extends StatelessWidget {
   static const name = 'home-screen';
@@ -19,8 +20,13 @@ class HomeScreen extends StatelessWidget {
   HomeScreen({super.key, required this.pageIndex});
 
   final pageRoutes = <Widget>[
-    HomeView(),
+    // feature : explore
+    const HomeView(),
+
+    // feature : products
     ShoppingCartScreen(),
+
+    // feature : custom_app
     const ProfileScreen(),
   ];
 
@@ -36,9 +42,12 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-class HomeView extends StatelessWidget {
+class HomeView extends ConsumerWidget {
+  const HomeView({super.key});
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    // TODO: Reemplazar por ref.watch(productsNotifierPorvider);
     final popularFoodDishes = localFoodData
         .where((product) =>
             product.clasifications.any((category) => category == 'popular'))
@@ -104,17 +113,23 @@ class _CategoriesList extends StatelessWidget {
             children: [
               FilledButton.icon(
                   style: buttonCategoryStyle,
-                  onPressed: () {},
+                  onPressed: () {
+                    context.push('/home/0/products/food');
+                  },
                   icon: const Icon(Icons.food_bank),
                   label: const Text('Comida')),
               FilledButton.icon(
                   style: buttonCategoryStyle,
-                  onPressed: () {},
+                  onPressed: () {
+                    context.push('/home/0/products/drinks');
+                  },
                   icon: const Icon(Icons.local_drink),
                   label: const Text('Bebida')),
               FilledButton.icon(
                   style: buttonCategoryStyle,
-                  onPressed: () {},
+                  onPressed: () {
+                    context.push('/home/0/products/snacks');
+                  },
                   icon: const Icon(Icons.food_bank_sharp),
                   label: const Text('Snacks')),
             ],
