@@ -51,7 +51,8 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     await keyValueStorageService.removeKey('token');
     state = state.copyWith(
       user: null,
-      authStatus: AuthStatus.notAuthenticated,
+      //authStatus: AuthStatus.notAuthenticated,
+      authStatus: AuthStatus.authenticated,
       errorMessage: errorMessage,
     );
   }

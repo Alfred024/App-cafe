@@ -2,19 +2,21 @@ import 'package:app_cafe/features/products/presentation/widgets/food_info_bezier
 import 'package:app_cafe/features/products/presentation/widgets/product_quantity_selector.dart';
 import 'package:app_cafe/features/shared/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../config/theme/app_theme.dart';
 
-
-class ProductInfoScreen extends StatelessWidget {
-  //final Product product;
+class ProductInfoScreen extends ConsumerWidget {
+  final int productId;
 
   const ProductInfoScreen({
-    super.key, required product,
+    super.key,
+    required this.productId,
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final colorScheme = AppTheme().getTheme().colorScheme;
+    // TODO: Hacer un ref.read() que busque un producto por su id
 
     return Scaffold(
       //Agregar el botón de me gusta a la derecha
@@ -34,7 +36,8 @@ class ProductInfoScreen extends StatelessWidget {
             const _ProductInfoSection(
               title: 'Hamburguesacon papas',
               price: 60,
-              description: 'Una hamburguesa acompañada con una ración de papas fritas. Incluye un vaso de agua de sabor',
+              description:
+                  'Una hamburguesa acompañada con una ración de papas fritas. Incluye un vaso de agua de sabor',
             ),
             const Spacer(),
             Container(

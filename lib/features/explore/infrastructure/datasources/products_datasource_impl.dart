@@ -11,10 +11,10 @@ class ProductsDatasourceImpl implements ProductsDatasource {
 
   ProductsDatasourceImpl({required this.jwtoken}) {
     dio = Dio(BaseOptions(
-      baseUrl: Environment.apiUrl,
-      connectTimeout: const Duration(milliseconds: 8000),
-      receiveTimeout: const Duration(milliseconds: 8000),
-    ));
+        baseUrl: Environment.apiUrl,
+        connectTimeout: const Duration(milliseconds: 8000),
+        receiveTimeout: const Duration(milliseconds: 8000),
+        headers: {'Authorization': 'Bearer $jwtoken'}));
   }
 
   List<Product> _getProductsList(Response<List<dynamic>> apiResponse) {
@@ -27,7 +27,21 @@ class ProductsDatasourceImpl implements ProductsDatasource {
   }
 
   @override
-  Future<List<Product>> getProducts({int productsQuantity = 10}) async {
+  Future<Product> getProductById(int productId) async {
+    try {
+      final response =
+          await dio.get<Map<String, dynamic>>('/products/$productId');
+
+      final product = ProductMapper.jsonEntityToProduct(response.data ?? {});
+      return product;
+    } catch (e) {
+      throw UnimplementedError();
+    }
+  }
+
+  // TODO: Implementar un parámetro para que limite la cantidad de productos
+  @override
+  Future<List<Product>> getProducts({int productsQuantity = 20}) async {
     try {
       final response = await dio.get<List>('/products');
       return _getProductsList(response);
