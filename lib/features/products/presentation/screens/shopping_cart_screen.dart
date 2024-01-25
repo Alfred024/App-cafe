@@ -1,8 +1,10 @@
 //import 'package:app_cafe/config/theme/app_theme.dart';
+import 'package:app_cafe/config/theme/app_theme.dart';
 import 'package:app_cafe/features/explore/data/food_dishes_saved.dart';
 import 'package:app_cafe/features/products/presentation/widgets/product_cart_item.dart';
 import 'package:app_cafe/features/shared/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import '../../../explore/data/food_dishes_list.dart';
 import '../../domain/entities/product.dart';
 // Agregar la dependencia go_router
@@ -14,17 +16,11 @@ class ShoppingCartScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context);
+    // TODO: Consumir la memoria local donde se guardan los platillos del usuario
     final List<Product> foodDishesSaved = localStoredFoodData;
 
     return Scaffold(
-      appBar: AppBar(
-          leading: IconButton(
-              //onPressed: () => context.pop(),
-              onPressed: () {},
-              icon: const Icon(Icons.arrow_back_ios)),
-          centerTitle: true,
-          title: const Text('Cart page')),
+      appBar: AppBar(centerTitle: true, title: const Text('Cart page')),
       body: Column(
         children: [
           Expanded(
@@ -34,84 +30,49 @@ class ShoppingCartScreen extends StatelessWidget {
                     final product = foodDishesSaved[index];
                     return ProductCartItem(
                       product: product,
-                      itemsCounter:
-                          2, //TODO:Implementar aquí el read provider para leer la cantidad de items
+                      itemsCounter: 2,
                     );
                   })),
-          const _OrderInfoContainer(),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            width: double.infinity,
-            child: CustomFilledButton(
-              radius: const Radius.circular(15),
-              text: 'Ordenar',
-              onPressed: () {},
-            ),
-          ),
+          const _OrderSubtotal(),
         ],
       ),
     );
   }
 }
 
-class _OrderInfoContainer extends StatelessWidget {
-  const _OrderInfoContainer({super.key});
-
+class _OrderSubtotal extends StatelessWidget {
+  const _OrderSubtotal({super.key});
+  // TODO: Calcular el subtotal de los productos guardados en el local storage
   @override
   Widget build(BuildContext context) {
-    const textStyle1 = TextStyle(fontSize: 16, fontWeight: FontWeight.w300);
-    const textStyle2 = TextStyle(fontSize: 21, fontWeight: FontWeight.w600);
+    final textTheme = AppTheme().getTheme().textTheme;
 
     return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 20),
       decoration: const BoxDecoration(
-          border: Border(top: BorderSide(color: Colors.black45, width: 0.5))),
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      width: double.infinity,
-      height: 100,
-      child: const Stack(children: [
-        Positioned(
-            left: 0,
-            top: 0,
-            child: Text(
-              'Orden',
-              style: textStyle1,
-            )),
-        Positioned(
-            left: 0,
-            top: 20,
-            child: Text(
-              'Comisión',
-              style: textStyle1,
-            )),
-        Positioned(
-            left: 0,
-            bottom: 0,
-            child: Text(
-              'Total',
-              style: textStyle2,
-            )),
-        Positioned(
-            right: 0,
-            top: 0,
-            child: Text(
-              '\$50',
-              style: textStyle1,
-            )),
-        Positioned(
-            right: 0,
-            top: 20,
-            child: Text(
-              '\$1',
-              style: textStyle1,
-            )),
-        Positioned(
-            right: 0,
-            bottom: 0,
-            child: Text(
-              '\$71',
-              style: textStyle2,
-            )),
-      ]),
+          border: Border(top: BorderSide(color: Colors.black, width: 0.5))),
+      padding: const EdgeInsets.only(top: 20, bottom: 10),
+      child: Row(
+        children: [
+          Text(
+            'Subtotal: \$90',
+            style: textTheme.titleMedium,
+          ),
+          const Spacer(),
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            width: 220,
+            child: CustomFilledButton(
+              radius: const Radius.circular(35),
+              text: 'Ordenar',
+              onPressed: () {
+                // TODO: Hacer un POST en el que se actualiza la órden del usuario
+                context.push('/home/0/order-details');
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

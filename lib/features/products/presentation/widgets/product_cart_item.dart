@@ -55,11 +55,14 @@ class ProductCartItem extends StatelessWidget {
                       ),
                     ),
                     Container(
-                      width: 35,
-                      height: 35,
+                      width: 40,
+                      height: 40,
                       decoration: buttonDecoration,
                       child: IconButton(
-                          onPressed: () {},
+                          iconSize: 25,
+                          onPressed: () {
+                            // TODO: Borrar del localStorage la órden
+                          },
                           icon: const Icon(
                             Icons.close,
                             color: Colors.white,

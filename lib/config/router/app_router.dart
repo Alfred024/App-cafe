@@ -1,5 +1,6 @@
 import 'package:app_cafe/config/router/app_router_notifier.dart';
 import 'package:app_cafe/features/auth/presentation/providers/auth_provider.dart';
+import 'package:app_cafe/features/payment/presentation/screens/screens.dart';
 import 'package:app_cafe/features/products/presentation/screens/product_info_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -44,6 +45,12 @@ final goRouterProvider = Provider((ref) {
                 return ProductInfoScreen(
                   productId: int.parse(productId),
                 );
+              },
+            ),
+            GoRoute(
+              path: 'order-details',
+              builder: (context, state) {
+                return const OrderDetails();
               },
             ),
           ]),

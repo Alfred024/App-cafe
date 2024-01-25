@@ -17,18 +17,19 @@ class ProductQuantitySelector extends StatelessWidget {
         color: colorScheeme.primary, borderRadius: BorderRadius.circular(50));
 
     return Container(
-      width: 100,
-      height: 30,
+      width: 110,
+      height: 35,
       decoration: containerDecoration,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(
-            width: 30,
-            height: 30,
+            width: 35,
+            height: 35,
             decoration: buttonDecoration,
             child: IconButton(
                 onPressed: () {},
+                iconSize: 20,
                 icon: const Icon(
                   Icons.remove,
                   color: Colors.white,
@@ -36,11 +37,13 @@ class ProductQuantitySelector extends StatelessWidget {
           ),
           Text(itemsCounter.toString()),
           Container(
-            height: 30,
-            width: 30,
+            height: 35,
+            width: 35,
             decoration: buttonDecoration,
+            alignment: Alignment.center,
             child: IconButton(
                 onPressed: () {},
+                iconSize: 20,
                 icon: const Icon(
                   Icons.add,
                   color: Colors.white,
